@@ -5,7 +5,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import Header from "./Header";
 import Landing from "./Landing";
-const Dashboard = () => <h1>Dashboard</h1>;
+import Dashboard from "./Dashboard";
+
 const ServeysNew = () => <h1>ServeysNew</h1>;
 
 class App extends Component {
