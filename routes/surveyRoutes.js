@@ -1,7 +1,5 @@
 const _ = require("lodash");
-// const Path = require("path-parser").default;
-const { Path } = require("path-parser");
-
+const Path = require("path-parser");
 const { URL } = require("url");
 const mongoose = require("mongoose");
 const requireLogin = require("../middlewares/requireLogin");
@@ -19,8 +17,19 @@ module.exports = app => {
     const events = _.map(req.body, event => {
       const pathname = new URL(event.url).pathname;
       const p = new Path("/api/surveys/:surveyId/:choice");
-      console.log(p.test(pathname));
+      const match = p.test(pathname);
+      if (match) {
+        return {
+          email: event.email,
+          surveyId: match.surveyId,
+          choice: match.choice
+        };
+      }
     });
+
+    const compactEvents = _.compact(events);
+    const uniqueEvents = _.uniqBy(compactEvents, "email", "surveyId");
+    console.log(uniqueEvents);
   });
 
   app.post("/api/surveys", requireLogin, requireCredit, async (req, res) => {
